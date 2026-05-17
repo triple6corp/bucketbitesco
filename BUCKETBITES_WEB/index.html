@@ -1,0 +1,2173 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BUCKET BITES — Street Food </title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700;900&family=Barlow:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --negro: #1A1A1A;
+    --negro-deep: #0d0d0d;
+    --amarillo: #FFD700;
+    --naranja: #FF4500;
+    --blanco: #F5F5F0;
+    --gris: #2a2a2a;
+    --font-display: 'Bebas Neue', sans-serif;
+    --font-body: 'Barlow Condensed', sans-serif;
+    --font-text: 'Barlow', sans-serif;
+  }
+
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--negro);
+    color: var(--blanco);
+    font-family: var(--font-body);
+    overflow-x: hidden;
+    cursor: default;
+  }
+
+  /* ── NOISE TEXTURE ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.6;
+  }
+
+  /* ── SCROLLBAR ── */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: var(--negro); }
+  ::-webkit-scrollbar-thumb { background: var(--amarillo); }
+
+  /* ══════════════════════════════════════
+     HEADER / NAV
+  ══════════════════════════════════════ */
+  header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--negro-deep);
+    border-bottom: 3px solid var(--amarillo);
+    padding: 0 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 70px;
+  }
+
+  .logo-wrap {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+  }
+
+  /* SVG Logo: stacked MINI / BITES con mordisco */
+  .logo-svg {
+    width: 56px;
+    height: 56px;
+    flex-shrink: 0;
+  }
+
+  .logo-text-block {
+    display: flex;
+    flex-direction: column;
+    line-height: 1;
+  }
+
+  .logo-mini {
+    font-family: var(--font-display);
+    font-size: 2rem;
+    color: var(--blanco);
+    letter-spacing: 0.12em;
+  }
+
+  .logo-bites {
+    font-family: var(--font-display);
+    font-size: 2rem;
+    color: var(--amarillo);
+    letter-spacing: 0.12em;
+    margin-top: -6px;
+  }
+
+  .logo-tag {
+    font-family: var(--font-body);
+    font-size: 0.65rem;
+    color: var(--naranja);
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    font-weight: 700;
+  }
+
+  nav {
+    display: flex;
+    gap: 2.5rem;
+    align-items: center;
+  }
+
+  nav a {
+    font-family: var(--font-body);
+    font-size: 0.85rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--blanco);
+    text-decoration: none;
+    font-weight: 700;
+    position: relative;
+    transition: color 0.2s;
+  }
+
+  nav a::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: var(--amarillo);
+    transition: width 0.25s;
+  }
+
+  nav a:hover { color: var(--amarillo); }
+  nav a:hover::after { width: 100%; }
+
+  .nav-cta {
+    background: var(--amarillo);
+    color: var(--negro) !important;
+    padding: 8px 20px;
+    font-weight: 900 !important;
+    letter-spacing: 0.15em !important;
+    transition: background 0.2s, transform 0.15s !important;
+  }
+
+  .nav-cta:hover {
+    background: var(--naranja) !important;
+    transform: skewX(-4deg);
+  }
+
+  .nav-cta::after { display: none !important; }
+
+  /* ══════════════════════════════════════
+     HERO
+  ══════════════════════════════════════ */
+  #hero {
+    min-height: 92vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-left {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 5rem 3rem 5rem 5vw;
+    position: relative;
+    z-index: 2;
+  }
+
+  .hero-eyebrow {
+    font-family: var(--font-body);
+    font-size: 0.75rem;
+    letter-spacing: 0.4em;
+    color: var(--naranja);
+    font-weight: 700;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .hero-eyebrow::before {
+    content: '';
+    display: block;
+    width: 32px;
+    height: 2px;
+    background: var(--naranja);
+  }
+
+  .hero-title {
+    font-family: var(--font-display);
+    font-size: clamp(4rem, 8vw, 7.5rem);
+    line-height: 0.9;
+    color: var(--blanco);
+    margin-bottom: 0.3em;
+  }
+
+  .hero-title span {
+    color: var(--amarillo);
+    display: block;
+  }
+
+  .hero-sub {
+    font-family: var(--font-body);
+    font-size: 1.15rem;
+    color: #aaa;
+    max-width: 420px;
+    line-height: 1.5;
+    margin-bottom: 2.5rem;
+    font-weight: 400;
+    font-family: var(--font-text);
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--amarillo);
+    color: var(--negro);
+    padding: 16px 36px;
+    font-family: var(--font-display);
+    font-size: 1.4rem;
+    letter-spacing: 0.1em;
+    text-decoration: none;
+    transition: all 0.2s;
+    clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 12px 100%, 0 calc(100% - 12px));
+  }
+
+  .btn-primary:hover {
+    background: var(--naranja);
+    transform: translate(-3px, -3px);
+    box-shadow: 6px 6px 0 var(--amarillo);
+  }
+
+  .btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    border: 2px solid var(--blanco);
+    color: var(--blanco);
+    padding: 16px 36px;
+    font-family: var(--font-display);
+    font-size: 1.4rem;
+    letter-spacing: 0.1em;
+    text-decoration: none;
+    transition: all 0.2s;
+  }
+
+  .btn-secondary:hover {
+    border-color: var(--amarillo);
+    color: var(--amarillo);
+  }
+
+  .hero-right {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Logo_hero*/
+  .mascot-container {
+    position: relative;
+    animation: mascot-float 3s ease-in-out infinite;
+  }
+
+  @keyframes mascot-float {
+    0%, 100% { transform: translateY(0) rotate(-6deg); }
+    50% { transform: translateY(-18px) rotate(6deg); }
+  }
+
+  .hero-bg-text {
+    position: absolute;
+    font-family: var(--font-display);
+    font-size: 22vw;
+    color: rgba(255,215,0,0.04);
+    white-space: nowrap;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    pointer-events: none;
+    letter-spacing: -0.02em;
+  }
+
+  .hero-stripe {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 6px;
+    background: repeating-linear-gradient(90deg, var(--amarillo) 0, var(--amarillo) 40px, var(--negro) 40px, var(--negro) 80px);
+    animation: stripe-scroll 6s linear infinite;
+  }
+
+  @keyframes stripe-scroll {
+    from { background-position: 0 0; }
+    to { background-position: 80px 0; }
+  }
+
+  /* Estilos para la imagen dentro de hero-right */
+.hero-right img {
+  width: 90%; /* Ajusta este porcentaje para definir qué tanto espacio ocupa (ej: 70%, 90%, 100%) */
+  max-width: 550px; /* Un tope máximo para que no se vea gigante en monitores muy grandes */
+  height: auto; /* Mantiene las proporciones originales sin deformar el render */
+  object-fit: contain; /* Evita que la imagen se recorte */
+  
+  /* Opcional: Un sombreado para darle más volumen y hacer que el render "flote" */
+  filter: drop-shadow(0px 25px 25px rgba(0,0,0,0.6)); 
+  transition: transform 0.3s ease; /* Suaviza la animación de hover */
+}
+
+/* Opcional: Efecto al pasar el mouse */
+.hero-right img:hover {
+  transform: translateY(-10px) scale(1.05);
+}
+
+  /* ══════════════════════════════════════
+     SECTION SHARED
+  ══════════════════════════════════════ */
+  section { padding: 6rem 5vw; }
+
+  .section-label {
+    font-family: var(--font-body);
+    font-size: 0.7rem;
+    letter-spacing: 0.45em;
+    color: var(--naranja);
+    text-transform: uppercase;
+    font-weight: 700;
+    margin-bottom: 0.75rem;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--gris);
+    max-width: 80px;
+  }
+
+  .section-title {
+    font-family: var(--font-display);
+    font-size: clamp(2.8rem, 5vw, 5rem);
+    line-height: 0.95;
+    margin-bottom: 1rem;
+  }
+
+  .section-title em {
+    color: var(--amarillo);
+    font-style: normal;
+  }
+
+  /* ══════════════════════════════════════
+     MENÚ — PRODUCTOS
+  ══════════════════════════════════════ */
+  #menu {
+    background: var(--negro-deep);
+    position: relative;
+    overflow: hidden;
+  }
+
+  #menu::before {
+    content: 'MENU';
+    position: absolute;
+    font-family: var(--font-display);
+    font-size: 18vw;
+    color: rgba(255,255,255,0.02);
+    top: -2vw;
+    right: -2vw;
+    pointer-events: none;
+  }
+
+  .menu-grid-wrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5rem;
+    margin-top: 3.5rem;
+  }
+
+  .menu-category-title {
+    font-family: var(--font-display);
+    font-size: 1.8rem;
+    letter-spacing: 0.1em;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .menu-category-title span {
+    font-size: 0.75rem;
+    background: var(--amarillo);
+    color: var(--negro);
+    padding: 4px 12px;
+    font-family: var(--font-body);
+    font-weight: 900;
+    letter-spacing: 0.15em;
+    vertical-align: middle;
+  }
+
+  .product-card {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.2rem;
+    border: 1px solid #2a2a2a;
+    margin-bottom: 0.8rem;
+    position: relative;
+    transition: all 0.2s;
+    cursor: pointer;
+    background: #111;
+  }
+
+  .product-card:hover {
+    border-color: var(--amarillo);
+    transform: translateX(6px);
+  }
+
+  .product-card:hover .product-num { color: var(--amarillo); }
+
+  .product-num {
+    font-family: var(--font-display);
+    font-size: 2.5rem;
+    color: #333;
+    transition: color 0.2s;
+    min-width: 50px;
+    text-align: center;
+  }
+
+  .product-info { flex: 1; }
+
+  .product-name {
+    font-family: var(--font-body);
+    font-size: 1.2rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  .product-desc {
+    font-family: var(--font-text);
+    font-size: 0.8rem;
+    color: #777;
+    margin-top: 2px;
+  }
+
+  .product-badge {
+    font-size: 0.65rem;
+    font-family: var(--font-body);
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border: 1px solid;
+  }
+
+  .badge-entrada { color: var(--amarillo); border-color: var(--amarillo); }
+  .badge-fuerte { color: var(--naranja); border-color: var(--naranja); }
+
+  .product-icon {
+    font-size: 1.8rem;
+    min-width: 40px;
+    text-align: center;
+  }
+  .product-photo {
+    width: 72px;
+    height: 72px;
+    object-fit: cover;
+    flex-shrink: 0;
+    border: 2px solid #222;
+    transition: border-color 0.2s;
+  }
+  .product-card:hover .product-photo { border-color: var(--amarillo); }
+
+  /* ══════════════════════════════════════
+     BALDES
+  ══════════════════════════════════════ */
+  #baldes {
+    background: var(--negro);
+    position: relative;
+  }
+
+  .baldes-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+    margin-top: 3.5rem;
+  }
+
+  .balde-card {
+    background: #111;
+    border: 2px solid #222;
+    padding: 2rem;
+    position: relative;
+    transition: all 0.3s;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .balde-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+  }
+
+  .balde-card.basic::before { background: #aaa; }
+  .balde-card.street::before { background: var(--amarillo); }
+  .balde-card.power::before { background: var(--naranja); }
+
+  .balde-card:hover {
+    transform: translateY(-8px);
+    border-color: currentColor;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+  }
+
+  .balde-card.basic:hover { border-color: #aaa; }
+  .balde-card.street:hover { border-color: var(--amarillo); box-shadow: 0 20px 60px rgba(255,215,0,0.1); }
+  .balde-card.power:hover { border-color: var(--naranja); box-shadow: 0 20px 60px rgba(255,69,0,0.15); }
+
+  .balde-num {
+    position: absolute;
+    top: 1.5rem;
+    right: 1.5rem;
+    font-family: var(--font-display);
+    font-size: 5rem;
+    line-height: 1;
+    opacity: 0.07;
+  }
+
+  .balde-icon-wrap {
+    margin-bottom: 1.5rem;
+  }
+
+  .balde-name {
+    font-family: var(--font-display);
+    font-size: 2.2rem;
+    line-height: 1;
+    margin-bottom: 0.4rem;
+  }
+
+  .balde-card.basic .balde-name { color: #ccc; }
+  .balde-card.street .balde-name { color: var(--amarillo); }
+  .balde-card.power .balde-name { color: var(--naranja); }
+
+  .balde-subtitle {
+    font-family: var(--font-body);
+    font-size: 0.7rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: #555;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+  }
+
+  .balde-contenido {
+    border-top: 1px solid #222;
+    padding-top: 1.2rem;
+    margin-bottom: 1.5rem;
+    flex: 1;
+  }
+
+  .balde-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--font-text);
+    font-size: 0.88rem;
+    color: #bbb;
+    margin-bottom: 0.5rem;
+  }
+
+  .balde-item::before {
+    content: '—';
+    color: #444;
+    font-size: 0.7rem;
+  }
+
+  .balde-tag {
+    font-size: 0.6rem;
+    font-family: var(--font-body);
+    font-weight: 900;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    padding: 2px 8px;
+    margin-left: auto;
+  }
+
+  .balde-card.street .balde-tag { background: rgba(255,215,0,0.15); color: var(--amarillo); }
+  .balde-card.power .balde-tag { background: rgba(255,69,0,0.15); color: var(--naranja); }
+  .balde-card.basic .balde-tag { background: rgba(200,200,200,0.1); color: #aaa; }
+
+  .balde-price {
+    font-family: var(--font-display);
+    font-size: 1rem;
+    letter-spacing: 0.05em;
+    color: #666;
+    margin-bottom: 1rem;
+    font-size: 0.8rem;
+    font-family: var(--font-body);
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+  }
+
+  .btn-pedir {
+    display: block;
+    text-align: center;
+    padding: 12px;
+    font-family: var(--font-display);
+    font-size: 1.2rem;
+    letter-spacing: 0.15em;
+    text-decoration: none;
+    transition: all 0.2s;
+    cursor: pointer;
+    border: none;
+    width: 100%;
+  }
+
+  .balde-card.basic .btn-pedir { background: #2a2a2a; color: var(--blanco); }
+  .balde-card.basic .btn-pedir:hover { background: #aaa; color: var(--negro); }
+  .balde-card.street .btn-pedir { background: var(--amarillo); color: var(--negro); }
+  .balde-card.street .btn-pedir:hover { background: var(--blanco); }
+  .balde-card.power .btn-pedir { background: var(--naranja); color: var(--blanco); }
+  .balde-card.power .btn-pedir:hover { background: #ff6633; }
+
+  /* ══════════════════════════════════════
+     ORDEN PERSONALIZADA
+  ══════════════════════════════════════ */
+  #pedir {
+    background: linear-gradient(135deg, #0d0d0d 0%, #151515 100%);
+    border-top: 1px solid #222;
+    border-bottom: 1px solid #222;
+  }
+
+  .order-builder {
+    margin-top: 3rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    align-items: start;
+  }
+
+  .order-panel {
+    background: #111;
+    border: 1px solid #222;
+    padding: 2rem;
+  }
+
+  .order-panel-title {
+    font-family: var(--font-body);
+    font-size: 0.7rem;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--naranja);
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #222;
+  }
+
+  .field-group {
+    margin-bottom: 1.5rem;
+  }
+
+  .field-label {
+    font-family: var(--font-body);
+    font-size: 0.75rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #666;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    display: block;
+  }
+
+  .field-select, .field-input, .field-textarea {
+    width: 100%;
+    background: #0d0d0d;
+    border: 1px solid #2a2a2a;
+    color: var(--blanco);
+    padding: 12px 14px;
+    font-family: var(--font-text);
+    font-size: 0.9rem;
+    outline: none;
+    transition: border-color 0.2s;
+    appearance: none;
+    -webkit-appearance: none;
+  }
+
+  .field-select:focus, .field-input:focus, .field-textarea:focus {
+    border-color: var(--amarillo);
+  }
+
+  .field-select option { background: #1a1a1a; }
+
+  .field-textarea { resize: vertical; min-height: 80px; }
+
+  .select-wrap { position: relative; }
+
+  .select-wrap::after {
+    content: '▾';
+    position: absolute;
+    right: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--amarillo);
+    pointer-events: none;
+  }
+
+  .order-summary {
+    background: #0d0d0d;
+    border: 1px solid #222;
+    padding: 2rem;
+    position: sticky;
+    top: 90px;
+  }
+
+  .summary-title {
+    font-family: var(--font-display);
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid #222;
+    padding-bottom: 1rem;
+  }
+
+  .summary-row {
+    display: flex;
+    justify-content: space-between;
+    font-family: var(--font-text);
+    font-size: 0.9rem;
+    padding: 8px 0;
+    border-bottom: 1px solid #1a1a1a;
+    color: #aaa;
+  }
+
+  .summary-row strong { color: var(--blanco); font-weight: 600; }
+
+  .summary-total {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    border-top: 2px solid var(--amarillo);
+  }
+
+  .summary-total-label {
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    letter-spacing: 0.1em;
+  }
+
+  .summary-total-val {
+    font-family: var(--font-display);
+    font-size: 2rem;
+    color: var(--amarillo);
+  }
+
+  .btn-whatsapp {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    width: 100%;
+    background: #25D366;
+    color: white;
+    padding: 16px;
+    font-family: var(--font-display);
+    font-size: 1.4rem;
+    letter-spacing: 0.1em;
+    text-decoration: none;
+    margin-top: 1.5rem;
+    transition: all 0.2s;
+    cursor: pointer;
+    border: none;
+  }
+
+  .btn-whatsapp:hover { background: #1ebe5b; transform: scale(1.01); }
+
+  /* ══════════════════════════════════════
+     PROMOS
+  ══════════════════════════════════════ */
+  #promos {
+    background: var(--negro-deep);
+    position: relative;
+    overflow: hidden;
+  }
+
+  #promos::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: -10%;
+    width: 120%;
+    height: 3px;
+    background: repeating-linear-gradient(90deg, var(--naranja) 0, var(--naranja) 30px, transparent 30px, transparent 60px);
+  }
+
+  .promos-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    margin-top: 3.5rem;
+  }
+
+  .promo-card {
+    border: 1px solid #222;
+    padding: 2rem;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.25s;
+    background: #0f0f0f;
+  }
+
+  .promo-card:hover { border-color: var(--naranja); }
+
+  .promo-corner {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background: var(--naranja);
+    color: white;
+    font-family: var(--font-display);
+    font-size: 0.9rem;
+    padding: 6px 14px;
+    letter-spacing: 0.05em;
+  }
+
+  .promo-icon {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .promo-title {
+    font-family: var(--font-display);
+    font-size: 1.6rem;
+    line-height: 1;
+    margin-bottom: 0.5rem;
+  }
+
+  .promo-desc {
+    font-family: var(--font-text);
+    font-size: 0.85rem;
+    color: #777;
+    line-height: 1.6;
+  }
+
+  .promo-desc strong { color: var(--amarillo); }
+
+  /* Ticker de promo */
+  .promo-ticker {
+    background: var(--amarillo);
+    color: var(--negro);
+    overflow: hidden;
+    white-space: nowrap;
+    padding: 10px 0;
+    margin-top: 5rem;
+  }
+
+  .ticker-track {
+    display: inline-block;
+    animation: ticker 20s linear infinite;
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    letter-spacing: 0.1em;
+  }
+
+  @keyframes ticker {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  /* ══════════════════════════════════════
+     CONTACTO
+  ══════════════════════════════════════ */
+  #contacto {
+    background: var(--negro);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5rem;
+    align-items: center;
+  }
+
+  .contact-left .section-title { margin-bottom: 1.5rem; }
+
+  .contact-desc {
+    font-family: var(--font-text);
+    font-size: 1rem;
+    color: #777;
+    line-height: 1.8;
+    margin-bottom: 2rem;
+  }
+
+  .contact-links {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .contact-link {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    text-decoration: none;
+    color: var(--blanco);
+    font-family: var(--font-body);
+    font-size: 1rem;
+    letter-spacing: 0.05em;
+    font-weight: 600;
+    padding: 1rem;
+    border: 1px solid #222;
+    transition: all 0.2s;
+  }
+
+  .contact-link:hover { border-color: var(--amarillo); color: var(--amarillo); transform: translateX(6px); }
+
+  .contact-link-icon {
+    width: 40px;
+    height: 40px;
+    background: #1a1a1a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    flex-shrink: 0;
+  }
+
+  .contact-right {
+    background: #0d0d0d;
+    border: 1px solid #222;
+    padding: 3rem;
+    position: relative;
+  }
+
+  .contact-right::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background: linear-gradient(to bottom, var(--amarillo), var(--naranja));
+  }
+
+  .hours-title {
+    font-family: var(--font-display);
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+    letter-spacing: 0.05em;
+  }
+
+  .hours-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid #1a1a1a;
+    font-family: var(--font-text);
+    font-size: 0.9rem;
+  }
+
+  .hours-row:last-of-type { border-bottom: none; }
+  .hours-row .day { color: #666; }
+  .hours-row .time { color: var(--amarillo); font-weight: 600; }
+
+  .status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 1.5rem;
+    font-family: var(--font-body);
+    font-size: 0.75rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #25D366;
+    font-weight: 700;
+  }
+
+  .status-dot {
+    width: 8px;
+    height: 8px;
+    background: #25D366;
+    border-radius: 50%;
+    animation: pulse-green 1.5s ease-in-out infinite;
+  }
+
+  @keyframes pulse-green {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(1.3); }
+  }
+
+  /* ══════════════════════════════════════
+     FOOTER
+  ══════════════════════════════════════ */
+  footer {
+    background: var(--negro-deep);
+    border-top: 3px solid #111;
+    padding: 2rem 5vw;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .footer-copy {
+    font-family: var(--font-text);
+    font-size: 0.8rem;
+    color: #444;
+  }
+
+  .footer-copy strong { color: var(--amarillo); }
+
+  .bite-points-badge {
+    background: #111;
+    border: 1px solid #222;
+    padding: 8px 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: var(--font-body);
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #666;
+  }
+
+  .bite-points-badge strong { color: var(--amarillo); }
+
+  /* ══════════════════════════════════════
+     ANIMACIONES DE ENTRADA
+  ══════════════════════════════════════ */
+  [data-reveal] {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+
+  [data-reveal].visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ══════════════════════════════════════
+     BEBIDAS
+  ══════════════════════════════════════ */
+  #bebidas {
+    background: var(--negro-deep);
+    position: relative;
+    overflow: hidden;
+  }
+
+  #bebidas::before {
+    content: 'DRINKS';
+    position: absolute;
+    font-family: var(--font-display);
+    font-size: 16vw;
+    color: rgba(255,255,255,0.02);
+    top: 50%;
+    right: -2vw;
+    transform: translateY(-50%);
+    pointer-events: none;
+  }
+
+  .bebidas-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    margin-top: 3.5rem;
+  }
+
+  .bebida-card {
+    background: #111;
+    border: 1px solid #222;
+    padding: 2rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    position: relative;
+    transition: all 0.3s;
+    overflow: hidden;
+  }
+
+  .bebida-card::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 3px;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s;
+  }
+
+  .bebida-card.cola::after { background: #E31212; }
+  .bebida-card.soda::after { background: #00B4D8; }
+  .bebida-card.tea::after  { background: #D4A017; }
+
+  .bebida-card:hover { border-color: #333; transform: translateY(-6px); }
+  .bebida-card:hover::after { transform: scaleX(1); }
+
+  .bebida-photo {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+    margin-bottom: 1.2rem;
+    transition: transform 0.4s ease;
+  }
+  .bebida-card:hover .bebida-photo { transform: scale(1.04); }
+  .bebida-ilus-wrap { overflow:hidden; margin-bottom:1.2rem; }
+  .bebida-ilustracion { margin-bottom: 1.5rem; }
+
+  .bebida-name {
+    font-family: var(--font-display);
+    font-size: 1.8rem;
+    line-height: 1;
+    margin-bottom: 0.4rem;
+    letter-spacing: 0.05em;
+  }
+
+  .bebida-card.cola .bebida-name { color: #E31212; }
+  .bebida-card.soda .bebida-name { color: #00B4D8; }
+  .bebida-card.tea  .bebida-name { color: #D4A017; }
+
+  .bebida-vol {
+    font-family: var(--font-body);
+    font-size: 0.7rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: #555;
+    font-weight: 700;
+    margin-bottom: 1rem;
+  }
+
+  .bebida-desc {
+    font-family: var(--font-text);
+    font-size: 0.82rem;
+    color: #666;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+    flex: 1;
+  }
+
+  .bebida-counter {
+    display: flex;
+    align-items: center;
+    border: 1px solid #2a2a2a;
+    overflow: hidden;
+  }
+
+  .bebida-btn {
+    width: 36px; height: 36px;
+    background: #1a1a1a;
+    border: none;
+    color: var(--blanco);
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: background 0.15s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .bebida-card.cola .bebida-btn:hover { background: #E31212; }
+  .bebida-card.soda .bebida-btn:hover { background: #00B4D8; }
+  .bebida-card.tea  .bebida-btn:hover { background: #D4A017; color: #1a1a1a; }
+
+  .bebida-qty {
+    width: 44px;
+    text-align: center;
+    font-family: var(--font-display);
+    font-size: 1.2rem;
+    color: var(--blanco);
+    background: transparent;
+    border: none;
+    border-left: 1px solid #2a2a2a;
+    border-right: 1px solid #2a2a2a;
+    outline: none;
+    appearance: textfield;
+  }
+
+  .bebida-qty::-webkit-outer-spin-button,
+  .bebida-qty::-webkit-inner-spin-button { -webkit-appearance: none; }
+
+  .bebidas-nota {
+    margin-top: 2rem;
+    border: 1px dashed #2a2a2a;
+    padding: 1rem 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    font-family: var(--font-text);
+    font-size: 0.82rem;
+    color: #555;
+  }
+
+  .bebidas-nota strong { color: var(--amarillo); }
+
+
+
+  /* ══════════════════════════════════════
+     DECORACIONES LOGO
+  ══════════════════════════════════════ */
+  @keyframes spin-slow {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
+  }
+  @keyframes spark-pulse {
+    0%,100% { opacity:0.4; transform:scale(1) rotate(0deg); }
+    50%     { opacity:0.9; transform:scale(1.2) rotate(15deg); }
+  }
+  @keyframes slide-x {
+    0%,100% { transform:translateX(0); opacity:0.3; }
+    50%     { transform:translateX(8px); opacity:0.6; }
+  }
+  @keyframes crown-bounce {
+    0%,100% { transform:translateY(0); }
+    50%     { transform:translateY(-6px); }
+  }
+  .deco-crown { position:absolute; pointer-events:none; }
+  .deco-spark { position:absolute; pointer-events:none; }
+  .deco-arrow { position:absolute; pointer-events:none; }
+
+
+
+  /* ══════════════════════════════════════
+     PRECIO BALDE
+  ══════════════════════════════════════ */
+  .balde-price-tag {
+    font-family: var(--font-display);
+    font-size: 2.4rem;
+    letter-spacing: 0.02em;
+    line-height: 1;
+    margin-bottom: 0.3rem;
+  }
+  .basic-price { color: #ccc; }
+  .street-price { color: var(--amarillo); }
+  .power-price { color: var(--naranja); }
+
+  /* ══════════════════════════════════════
+     RESPONSIVE
+  ══════════════════════════════════════ */
+  @media (max-width: 1024px) {
+    #hero { grid-template-columns: 1fr; }
+    .hero-right { min-height: 340px; }
+    .menu-grid-wrapper { grid-template-columns: 1fr; gap: 3rem; }
+    .baldes-grid { grid-template-columns: 1fr; max-width: 420px; }
+    .bebidas-grid { grid-template-columns: 1fr; max-width: 380px; }
+    .order-builder { grid-template-columns: 1fr; }
+    .promos-grid { grid-template-columns: 1fr 1fr; }
+    #contacto { grid-template-columns: 1fr; }
+    nav { display: none; }
+  }
+
+  @media (max-width: 640px) {
+    .promos-grid { grid-template-columns: 1fr; }
+    .hero-left { padding: 3rem 1.5rem; }
+    section { padding: 4rem 1.5rem; }
+    footer { flex-direction: column; gap: 1rem; text-align: center; }
+  }
+  /* Contenedor principal carrusel*/
+.carrusel-container {
+    width: 100%;
+    overflow: hidden; /* Esconde lo que sale de la pantalla */
+     background: var(--negro-deep);
+    padding: 5rem 0;
+    overflow: hidden;
+    border-top: 3px solid var(--amarillo);
+    border-bottom: 3px solid var(--amarillo);
+    position: relative;
+    padding: 4rem 0; 
+  margin-top: 80px;
+}
+  .gallery-header {
+    padding: 0 5vw 3rem;
+    display: flex;
+    align-items: baseline;
+    gap: 1.5rem;
+  }
+
+/* La fila que se mueve */
+.carrusel-track {
+    display: flex;
+    width: max-content; /* Ajusta según el número de fotos */
+    animation: scroll 20s linear infinite;
+}
+
+.carrusel-item {
+    width: 500px;
+    padding: 20px;
+    flex-shrink: 0;
+    overflow: hidden;
+}
+
+.carrusel-item img {
+    width: 500px;
+    height: 500px;
+    flex-shrink: 0;
+    border-radius: 2px solid var(--gris);
+    overflow:hidden
+}
+
+.carrusel-track {
+  display: flex;
+  width: max-content;
+  animation: scrollInfinito 25s linear infinite;
+}
+
+@keyframes scrollInfinito {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+
+
+/* Pausa el carrusel cuando pasas el ratón por encima */
+.carrusel-track:hover {
+    animation-play-state: paused;
+    
+}
+
+/* VIDEO */
+.video-wrap {
+  position: relative;
+  width: 100%;
+  max-width: 900px;
+  aspect-ratio: 16 / 9;   /* mantiene proporción automáticamente */
+  margin: 2rem auto;
+  overflow: hidden;
+}
+
+.video-wrap iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+.video-wrap {
+  border: 2px solid #FFD700;
+  box-shadow: 6px 6px 0 #FF4500;
+}
+.opcion-activa {
+  border: 2px solid #FFD700;
+  transform: scale(1.03);
+}
+
+
+
+
+
+</style>
+</head>
+<body>
+
+<!-- ══ HEADER ══════════════════════════════════════ -->
+<header>
+  <a href="#hero" class="logo-wrap">
+    <img src="web_images\monograma.png" alt="BUCKET BITES" style="height: 60px; width: auto; object-fit: contain;">
+    </a>
+
+  <nav>
+    <a href="#menu">Menú</a>
+    <a href="#baldes">Baldes</a>
+    <a href="#bebidas">Bebidas</a>
+    <a href="#promos">Promos</a>
+    <a href="#contacto">Contacto</a>
+    <a href="#pedir" class="nav-cta">PEDIR YA ↗</a>
+  </nav>
+</header>
+
+<!-- ══ HERO ══════════════════════════════════════ -->
+<section id="hero">
+  <div class="hero-bg-text">BITE</div>
+
+  <div class="hero-left">
+    <div class="hero-eyebrow">Dark Kitchen · Street Food · Armenia, Quindío</div>
+    <h1 class="hero-title">
+      CERO<br>
+      <span>REGLAS,</span>
+      FULL<br>SABOR.
+    </h1>
+    <p class="hero-sub">
+      BUCKET BITES, 6 bites en un balde.<br> Sin complicaciones, puro sabor callejero.<br>
+      Elige tu combo, pide por WhatsApp,<br> listo en menos de 8 minutos.
+    </p>
+    <div class="hero-actions">
+      <a href="#pedir" class="btn-primary">🛒 ARMAR MI BALDE</a>
+      <a href="#baldes" class="btn-secondary">VER OPCIONES</a>
+    </div>
+  </div>
+
+    <div class="hero-right">
+      <img src="web_images/bucky.png"  alt="Bucky Bites">
+    <div class="mascot-container">
+    <img src="web_images/logo_BB_1080.png">    </div>
+  </div>
+</section>
+
+
+<!-- Carrusel de Productos -->
+ <div class="carrusel-header">
+    <div class="section-label" style="margin-bottom:0;">Las vibes</div>
+    <h2 class="section-title" style="margin-bottom:0;">FULL <em>ACTITUD</em></h2>
+
+<div class="carrusel-container">
+    <div class="carrusel-track">
+        <!-- Imagen 1 -->
+        <div class="carrusel-item">
+            <img src="web_images/arepita.png" alt="arepita">
+        </div>
+        <!-- Imagen 2 -->
+        <div class="carrusel-item">
+            <img src="web_images/empanadita.png" alt="empanadita">
+        </div>
+        <!-- Imagen 3 -->
+        <div class="carrusel-item">
+            <img src="web_images/hamburguesita.png" alt="burguer">
+        </div>
+        <!-- Imagen 4 -->
+        <div class="carrusel-item">
+            <img src="web_images/marranita.png" alt="marranita">
+        </div>
+        <!-- Imagen 5 -->
+        <div class="carrusel-item">
+            <img src="web_images/perrito.png" alt="perrito">
+        </div>
+        <!-- Imagen 6 -->
+        <div class="carrusel-item">
+            <img src="web_images/bucket_power.png" alt="bucket_power">
+        </div>
+        <!-- Imagen 7 -->
+        <div class="carrusel-item">
+            <img src="web_images/logo_bucket_bites_white.png" alt="logo_BB">
+        </div>
+        
+        <!-- Repetir imágenes para que el efecto sea infinito -->
+        <div class="carrusel-item">
+            <img src="web_images/arepita.png" alt="arepita">
+        </div>
+        <!-- Imagen 2 -->
+        <div class="carrusel-item">
+            <img src="web_images/empanadita.png" alt="empanadita">
+        </div>
+        <!-- Imagen 3 -->
+        <div class="carrusel-item">
+            <img src="web_images/hamburguesita.png" alt="burguer">
+        </div>
+        <!-- Imagen 4 -->
+        <div class="carrusel-item">
+            <img src="web_images/marranita.png" alt="marranita">
+        </div>
+        <!-- Imagen 5 -->
+        <div class="carrusel-item">
+            <img src="web_images/perrito.png" alt="perrito">
+        </div>
+        <!-- Imagen 6 -->
+        <div class="carrusel-item">
+            <img src="web_images/bucket_power.png" alt="bucket_power">
+        </div>
+        <!-- Imagen 7 -->
+        <div class="carrusel-item">
+            <img src="web_images/logo_bucket_bites_white.png" alt="logo_BB">
+        </div>
+    </div>
+</div>
+
+<div class="video-wrap">
+  
+  <div class="video-responsive">
+    <iframe src="https://www.youtube.com/embed/_8CbbAe83TY" allowfullscreen></iframe>
+</div>
+</div>
+
+<!-- ══ MENÚ ══════════════════════════════════════ -->
+<section id="menu" style="position:relative;">
+  <div class="section-label">Lo que va en tu balde</div>
+  <h2 class="section-title">EL <em>MENÚ</em></h2>
+  <p style="font-family:var(--font-text);color:#666;max-width:480px;line-height:1.7;margin-top:0.5rem;">
+    Dos categorías. Combinaciones infinitas. Tú armas el balde que quieras dentro de las reglas del juego.
+  </p>
+
+  <div class="menu-grid-wrapper">
+    <!-- ENTRADAS -->
+    <div data-reveal>
+      <div class="menu-category-title">
+        ENTRADAS <span>Mini formato</span>
+      </div>
+
+      <div class="product-card">
+        <div class="product-num">01</div>
+        <img src ="web_images/empanadita.png" height="100px" weight="100px" alt="Empanadita" class="product-image">
+        <div class="product-info">
+          <div class="product-name">Empanadita</div>
+          <div class="product-desc">Masa crocante, relleno generoso. La clásica sin drama.</div>
+        </div>
+        <div class="product-badge badge-entrada">Entrada</div>
+      </div>
+
+      <div class="product-card">
+        <div class="product-num">02</div>
+        <img src ="web_images/marranita.png" height="100px" weight="100px" alt="Marranita" class="product-image">
+        <div class="product-info">
+          <div class="product-name">Marranita</div>
+          <div class="product-desc">Chicharrón + plátano. Sabor del barrio en un bite.</div>
+        </div>
+        <div class="product-badge badge-entrada">Entrada</div>
+      </div>
+    </div>
+
+    <!-- FUERTES -->
+    <div data-reveal>
+      <div class="menu-category-title">
+        FUERTES <span>El plato fuerte</span>
+      </div>
+
+      <div class="product-card">
+        <div class="product-num">03</div>
+        <img src ="web_images/perrito.png" height="100px" weight="100px" alt="Perrito" class="product-image">
+        <div class="product-info">
+          <div class="product-name">Perrito</div>
+          <div class="product-desc">Perro caliente mini, salsa de la casa, actitud 100%.</div>
+        </div>
+        <div class="product-badge badge-fuerte">Fuerte</div>
+      </div>
+
+      <div class="product-card">
+        <div class="product-num">04</div>
+        <img src ="web_images/hamburguesita.png" height="100px" weight="100px" alt="Hamburguesita" class="product-image">
+        <div class="product-info">
+          <div class="product-name">Hamburguesita</div>
+          <div class="product-desc">Burger mini con todo. Sin escalas, sin filtros.</div>
+        </div>
+        <div class="product-badge badge-fuerte">Fuerte</div>
+      </div>
+
+      <div class="product-card">
+        <div class="product-num">05</div>
+        <img src ="web_images/arepita.png" height="100px" weight="100px" alt="arepita" class="product-image">
+        <div class="product-info">
+          <div class="product-name">Arepita Rellena</div>
+          <div class="product-desc">Arepa mini rellena hasta el tope. La firma de la casa.</div>
+        </div>
+        <div class="product-badge badge-fuerte">Fuerte</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ BALDES ══════════════════════════════════════ -->
+<section id="baldes" style="position:relative;">
+  <div class="section-label">Elige tu balde</div>
+  <h2 class="section-title">3 TIPOS DE <em>BALDE</em></h2>
+  <p style="font-family:var(--font-text);color:#666;max-width:520px;line-height:1.7;margin-top:0.5rem;">
+    Siempre en múltiplos de 6. Así es como funciona el juego.
+  </p>
+
+  <div class="baldes-grid">
+
+    <!-- ROOKIES BITES -->
+    <div class="balde-card basic" data-reveal>
+      <div class="balde-num">1</div>
+      <div class="balde-icon-wrap">
+        <svg width="60" height="72" viewBox="0 0 60 72" fill="none">
+          <rect x="5" y="18" width="50" height="48" rx="4" fill="#1a1a1a" stroke="#aaa" stroke-width="2"/>
+          <ellipse cx="30" cy="18" rx="25" ry="8" fill="#222" stroke="#aaa" stroke-width="2"/>
+          <text x="30" y="46" text-anchor="middle" font-family="'Bebas Neue',sans-serif" font-size="11" fill="#aaa" letter-spacing="1">ROOKIES</text>
+        </svg>
+      </div>
+      <div class="balde-name">ROOKIES<br>BITES</div>
+      <div class="balde-subtitle">Balde N°1 · Todo entradas</div>
+      <div class="balde-contenido">
+        <div class="balde-item">
+          6 piezas de entradas
+          <span class="balde-tag">×6</span>
+        </div>
+        <div class="balde-item">Empanaditas</div>
+        <div class="balde-item">Marranitas</div>
+        <div class="balde-item" style="color:#444;font-size:0.78rem;margin-top:0.5rem;">Puedes mezclar entre las dos opciones de entrada</div>
+      </div>
+      <div class="balde-price-tag basic-price">$22.000</div><div class="balde-price">💛 El starter pack</div>
+      <button class="btn-pedir" onclick="elegirBalde('Basic Bites — 6 Entradas')">ARMAR ESTE BALDE</button>
+    </div>
+
+    <!-- STREET BITES -->
+    <div class="balde-card street" data-reveal>
+      <div class="balde-num">2</div>
+      <div class="balde-icon-wrap">
+        <svg width="60" height="72" viewBox="0 0 60 72" fill="none">
+          <rect x="5" y="18" width="50" height="48" rx="4" fill="#1a1a1a" stroke="#FFD700" stroke-width="2"/>
+          <ellipse cx="30" cy="18" rx="25" ry="8" fill="#222" stroke="#FFD700" stroke-width="2"/>
+          <text x="30" y="46" text-anchor="middle" font-family="'Bebas Neue',sans-serif" font-size="10" fill="#FFD700" letter-spacing="1">STREET</text>
+        </svg>
+      </div>
+      <div class="balde-name">STREET<br>BITES</div>
+      <div class="balde-subtitle">Balde N°2 · Mix perfecto</div>
+      <div class="balde-contenido">
+        <div class="balde-item">
+          3 piezas de entrada
+          <span class="balde-tag">×3</span>
+        </div>
+        <div class="balde-item">Empanaditas / Marranitas</div>
+        <div class="balde-item" style="margin-top:6px;">
+          3 piezas fuertes
+          <span class="balde-tag">×3</span>
+        </div>
+        <div class="balde-item">Perrito / Hamburguesita / Arepita</div>
+      </div>
+      <div class="balde-price-tag street-price">$32.000</div><div class="balde-price">⚡ El favorito del barrio</div>
+      <button class="btn-pedir" onclick="elegirBalde('Street Bites — 3 Entradas + 3 Fuertes')">ARMAR ESTE BALDE</button>
+    </div>
+
+    <!-- PRO MODEL BITES -->
+    <div class="balde-card power" data-reveal>
+      <div class="balde-num">3</div>
+      <div class="balde-icon-wrap">
+        <svg width="60" height="72" viewBox="0 0 60 72" fill="none">
+          <rect x="5" y="18" width="50" height="48" rx="4" fill="#1a1a1a" stroke="#FF4500" stroke-width="2"/>
+          <ellipse cx="30" cy="18" rx="25" ry="8" fill="#222" stroke="#FF4500" stroke-width="2"/>
+          <text x="30" y="46" text-anchor="middle" font-family="'Bebas Neue',sans-serif" font-size="10" fill="#FF4500" letter-spacing="1">PROMODEL</text>
+        </svg>
+      </div>
+      <div class="balde-name">PROMODEL<br>BITES</div>
+      <div class="balde-subtitle">Balde N°3 · Todo fuertes</div>
+      <div class="balde-contenido">
+        <div class="balde-item">
+          6 piezas fuertes
+          <span class="balde-tag">×6</span>
+        </div>
+        <div class="balde-item">Perrito</div>
+        <div class="balde-item">Hamburguesita</div>
+        <div class="balde-item">Arepita Rellena</div>
+        <div class="balde-item" style="color:#444;font-size:0.78rem;margin-top:0.5rem;">Mezcla los tres fuertes como quieras</div>
+      </div>
+      <div class="balde-price-tag power-price">$42.000</div><div class="balde-price">🏆 Nivel campeon </div>
+      <button class="btn-pedir" onclick="elegirBalde('Power Bites — 6 Fuertes')">ARMAR ESTE BALDE</button>
+    </div>
+
+  </div>
+</section>
+
+<!-- ══ BEBIDAS ══════════════════════════════════════ -->
+<section id="bebidas" style="position:relative;">
+  <img src="web_images/monograma.png" class="monograma-animado" style="height: 200px;">
+  <div class="section-label">Para acompañar tu balde</div>
+  <h2 class="section-title">BEBIDAS <em>FRÍAS</em></h2>
+  <p style="font-family:var(--font-text);color:#666;max-width:480px;line-height:1.7;margin-top:0.5rem;">
+    400 ml de actitud líquida. Añade las que quieras a tu pedido.
+  </p>
+
+  <div class="bebidas-grid">
+
+    <!-- COCA COLA -->
+    <div class="bebida-card cola" data-reveal>
+      <div class="bebida-ilus-wrap">
+        <img src="web_images/cocacola.png" alt="coca cola" style="height: 300px;">
+      </div>
+      <div class="bebida-name">COCA COLA</div>
+      <div class="bebida-vol">400 ml · Pet fría</div>
+      <p class="bebida-desc">La clásica de siempre. El acompañante perfecto para cualquier balde.</p>
+      <div class="bebida-counter">
+        <button class="bebida-btn" onclick="cambiarQty('qty-cola', -1)">−</button>
+        <input type="number" class="bebida-qty" id="qty-cola" value="0" min="0" max="20" oninput="syncBebidas()">
+        <button class="bebida-btn" onclick="cambiarQty('qty-cola', 1)">+</button>
+      </div>
+      <div style="font-family:var(--font-body);font-size:0.7rem;letter-spacing:0.2em;text-transform:uppercase;color:#555;margin-top:0.6rem;font-weight:700;">$6.000 / unidad</div>
+    </div>
+
+    <!-- SODA -->
+    <div class="bebida-card soda" data-reveal>
+      <div class="bebida-ilus-wrap">
+        <img src="web_images/soda.png" alt="soda" style="height: 300px;">
+
+      </div>
+      <div class="bebida-name">SODA</div>
+      <div class="bebida-vol">400 ml · Pet fría</div>
+      <p class="bebida-desc">Burbujas bien frías. Para los que prefieren algo más ligero y refrescante.</p>
+      <div class="bebida-counter">
+        <button class="bebida-btn" onclick="cambiarQty('qty-soda', -1)">−</button>
+        <input type="number" class="bebida-qty" id="qty-soda" value="0" min="0" max="20" oninput="syncBebidas()">
+        <button class="bebida-btn" onclick="cambiarQty('qty-soda', 1)">+</button>
+      </div>
+      <div style="font-family:var(--font-body);font-size:0.7rem;letter-spacing:0.2em;text-transform:uppercase;color:#555;margin-top:0.6rem;font-weight:700;">$6.000 / unidad</div>
+    </div>
+
+    <!-- MR TEA -->
+    <div class="bebida-card tea" data-reveal>
+      <div class="bebida-ilus-wrap">
+        <img src="web_images/mrtea.png" alt="mr tea" style="height: 300px;">
+      </div>
+      <div class="bebida-name">MR TEA</div>
+      <div class="bebida-vol">400 ml · Té Limón</div>
+      <p class="bebida-desc">Té helado sabor limón. El wild card del combo, diferente y refrescante.</p>
+      <div class="bebida-counter">
+        <button class="bebida-btn" onclick="cambiarQty('qty-tea', -1)">−</button>
+        <input type="number" class="bebida-qty" id="qty-tea" value="0" min="0" max="20" oninput="syncBebidas()">
+        <button class="bebida-btn" onclick="cambiarQty('qty-tea', 1)">+</button>
+      </div>
+      <div style="font-family:var(--font-body);font-size:0.7rem;letter-spacing:0.2em;text-transform:uppercase;color:#555;margin-top:0.6rem;font-weight:700;">$6.000 / unidad</div>
+    </div>
+
+  </div>
+
+  <div class="bebidas-nota">
+    💡 Las bebidas que selecciones acá se agregan <strong>automáticamente a tu pedido de WhatsApp</strong> junto con tu balde.
+  </div>
+</section>
+
+<!-- ══ PEDIR ══════════════════════════════════════ -->
+<section id="pedir">
+  <div class="section-label">Haz tu pedido</div>
+  <h2 class="section-title">ARMA TU <em>BALDE</em></h2>
+
+  <div class="order-builder">
+    <div>
+      <div class="order-panel">
+        <div class="order-panel-title">Configuración del pedido</div>
+
+        <div class="field-group">
+          <label class="field-label" for="sel-balde">Tipo de balde</label>
+          <div class="select-wrap">
+            <select class="field-select" id="sel-balde" onchange="actualizarResumen()">
+              <option value="">— Elige tu balde —</option>
+              <option value="Basic Bites — 6 Entradas">🥟 ROOKIE BITES — 6 Entradas</option>
+              <option value="Street Bites — 3 Entradas + 3 Fuertes">⚡ STREET BITES — 3+3 Mix</option>
+              <option value="Power Bites — 6 Fuertes">🔥 PROMODEL BITES — 6 Fuertes</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="field-group" id="bloque-entradas" style="display:none;">
+          <label class="field-label">Entradas (¿cuántas de cada una?)</label>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.8rem;margin-top:0.5rem;">
+            <div>
+              <label class="field-label" style="font-size:0.65rem;">🥟 Empanaditas</label>
+              <input type="number" class="field-input" id="num-empanada" min="0" max="6" value="0" onchange="actualizarResumen()">
+            </div>
+            <div>
+              <label class="field-label" style="font-size:0.65rem;">🍌 Marranitas</label>
+              <input type="number" class="field-input" id="num-marranita" min="0" max="6" value="0" onchange="actualizarResumen()">
+            </div>
+          </div>
+        </div>
+
+        <div class="field-group" id="bloque-fuertes" style="display:none;">
+          <label class="field-label">Fuertes (¿cuántos de cada uno?)</label>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.8rem;margin-top:0.5rem;">
+            <div>
+              <label class="field-label" style="font-size:0.65rem;">🌭 Perritos</label>
+              <input type="number" class="field-input" id="num-perro" min="0" max="6" value="0" onchange="actualizarResumen()">
+            </div>
+            <div>
+              <label class="field-label" style="font-size:0.65rem;">🍔 Burger</label>
+              <input type="number" class="field-input" id="num-burger" min="0" max="6" value="0" onchange="actualizarResumen()">
+            </div>
+            <div>
+              <label class="field-label" style="font-size:0.65rem;">🫓 Arepa</label>
+              <input type="number" class="field-input" id="num-arepa" min="0" max="6" value="0" onchange="actualizarResumen()">
+            </div>
+          </div>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label" for="sel-cantidad">¿Cuántos baldes?</label>
+          <div class="select-wrap">
+            <select class="field-select" id="sel-cantidad" onchange="actualizarResumen()">
+              <option value="1">1 balde</option>
+              <option value="2">2 baldes</option>
+              <option value="3">3 baldes</option>
+              <option value="4">4 baldes</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label" for="inp-nombre">Tu nombre</label>
+          <input type="text" class="field-input" id="inp-nombre" placeholder="¿Cómo te llamas?" oninput="actualizarResumen()">
+        </div>
+
+        <div class="field-group">
+          <label class="field-label" for="inp-direccion">Dirección de entrega</label>
+          <input type="text" class="field-input" id="inp-direccion" placeholder="Barrio, calle, referencia..." oninput="actualizarResumen()">
+        </div>
+
+        <div class="field-group">
+          <label class="field-label" for="inp-nota">Nota adicional (opcional)</label>
+          <textarea class="field-textarea" id="inp-nota" placeholder="¿Algo especial? Sin esto, sin aquello..."></textarea>
+        </div>
+      </div>
+    </div>
+
+    <!-- RESUMEN -->
+    <div>
+      <div class="order-summary">
+        <div class="summary-title">MI PEDIDO</div>
+
+        <div class="summary-row">
+          <span>Balde elegido</span>
+          <strong id="res-balde">—</strong>
+        </div>
+        <div class="summary-row">
+          <strong id="res-desglose" style="color:#777;font-size:0.8rem;width:100%;">Selecciona un balde para ver el detalle</strong>
+        </div>
+        <div class="summary-row">
+          <span>Cantidad</span>
+          <strong id="res-cantidad">1</strong>
+        </div>
+        <div class="summary-row">
+          <span>Nombre</span>
+          <strong id="res-nombre">—</strong>
+        </div>
+        <div class="summary-row">
+          <span>Dirección</span>
+          <strong id="res-dir" style="font-size:0.8rem;">—</strong>
+        </div>
+        <div class="summary-row">
+          <span>Bebidas</span>
+          <strong id="res-bebidas" style="font-size:0.8rem;">—</strong>
+        </div>
+
+        <div class="summary-row">
+          <span>Precio balde</span>
+          <strong id="res-precio-unit">—</strong>
+        </div>
+        <div class="summary-row" id="row-bebidas-precio" style="display:none;">
+          <span>Bebidas</span>
+          <strong id="res-precio-bebidas">—</strong>
+        </div>
+        <div class="summary-total">
+          <span class="summary-total-label">TOTAL</span>
+          <span class="summary-total-val" id="res-total">—</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:0.8rem;padding:8px 0;border-top:1px dashed #2a2a2a;">
+          <span style="font-family:var(--font-body);font-size:0.7rem;letter-spacing:0.2em;text-transform:uppercase;color:#555;">Tiempo est.</span>
+          <span style="font-family:var(--font-display);font-size:1.2rem;color:var(--naranja);">~25 min</span>
+        </div>
+
+        <a id="btn-ws" href="#" class="btn-whatsapp" onclick="pedirPorWhatsapp(event)">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.124.553 4.122 1.522 5.863L.057 23.846l6.086-1.589A11.946 11.946 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.85 0-3.59-.476-5.11-1.311l-3.614.944.972-3.544A9.961 9.961 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
+          PEDIR POR WHATSAPP
+        </a>
+
+        <p style="font-family:var(--font-text);font-size:0.72rem;color:#444;text-align:center;margin-top:1rem;line-height:1.6;">
+          Te redirigimos a WhatsApp con tu pedido armado.<br>
+          Pago contra entrega.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ PROMOS ══════════════════════════════════════ -->
+<section id="promos" style="position:relative;">
+  <img src="web_images/corona_mb.png" alt="corona" style="width:300px;height:300px;position:absolute;top:20px;left:140px;opacity:0.8;"> 
+  <div style="display:flex;align-items:flex-end;gap:2rem;flex-wrap:wrap;">
+    <div>
+      <div class="section-label">Ofertas y programas</div>
+      <h2 class="section-title"><em>PROMOS</em> DE LA CASA</h2>
+    </div>
+    <img src="web_images/bucky.png" alt="Bucky" style="width:300px;height:300px;margin-left:auto;">
+  </div>
+
+  <div class="promos-grid" style="margin-top:3.5rem;">
+
+    <div class="promo-card" data-reveal>
+      <div class="promo-corner">HOT</div>
+      <div class="promo-icon">⚡</div>
+      <div class="promo-title">2X1 EN<br>ROOKIES BITES</div>
+      <p class="promo-desc">Lunes y martes pide 2 baldes Rookies y solo pagas 1. <strong>El arranque de semana más brutal.</strong></p>
+    </div>
+
+    <div class="promo-card" data-reveal>
+      <div class="promo-corner">PROGRAMA</div>
+      <div class="promo-icon">🏆</div>
+      <div class="promo-title">BITE<br>POINTS</div>
+      <p class="promo-desc">Cada compra suma puntos. <strong>5 compras = 1 balde gratis.</strong> Pregunta por tu código de fidelidad al hacer el pedido.</p>
+    </div>
+
+    <div class="promo-card" data-reveal>
+      <div class="promo-corner">NUEVO</div>
+      <div class="promo-icon">🤝</div>
+      <div class="promo-title">TRAE UN<br>PARCERO</div>
+      <p class="promo-desc">Refiere a un amigo que haga su primer pedido y <strong>los dos reciben una entrada de regalo</strong> en su siguiente balde.</p>
+    </div>
+
+  </div>
+
+  <div class="promo-ticker">
+    <div class="ticker-track">
+      🔥 ENVÍO GRATIS EN TU PRIMER PEDIDO &nbsp;·&nbsp; ⚡ LISTO EN MENOS DE 8 MINUTOS &nbsp;·&nbsp; 🏆 ACUMULA BUCKET POINTS &nbsp;·&nbsp; 🎯 SOLO POR WHATSAPP &nbsp;·&nbsp;
+      🔥 ENVÍO GRATIS EN TU PRIMER PEDIDO &nbsp;·&nbsp; ⚡ LISTO EN MENOS DE 8 MINUTOS &nbsp;·&nbsp; 🏆 ACUMULA BUCKET POINTS &nbsp;·&nbsp; 🎯 SOLO POR WHATSAPP &nbsp;·&nbsp;
+    </div>
+  </div>
+</section>
+
+<!-- ══ CONTACTO ══════════════════════════════════════ -->
+<section id="contacto">
+  <div class="contact-left">
+    <div class="section-label">Encuéntranos</div>
+    <h2 class="section-title">CONTACTO <em>&</em><br>HORARIOS</h2>
+    <p class="contact-desc">
+      Somos una dark kitchen. No hay local físico, pero estamos siempre disponibles
+      en los canales de abajo para que tu balde llegue sin drama.
+    </p>
+    <div class="contact-links">
+      <a href="https://wa.me/573012145150" class="contact-link" target="_blank">
+        <div class="contact-link-icon">📱</div>
+        WhatsApp: +57 3012145150
+      </a>
+      <a href="https://instagram.com/bucketbitesco" class="contact-link" target="_blank">
+        <div class="contact-link-icon">📸</div>
+        @bucketbitesco — Instagram
+      </a>
+      <a href="#" class="contact-link">
+        <div class="contact-link-icon">📍</div>
+        Servicio a domicilio · Zona urbana
+      </a>
+    </div>
+  </div>
+
+  <div class="contact-right">
+    <div class="hours-title">HORARIOS</div>
+
+    <div class="hours-row">
+      <span class="day">Lunes — Viernes</span>
+      <span class="time">12:00 — 22:00</span>
+    </div>
+    <div class="hours-row">
+      <span class="day">Sábado</span>
+      <span class="time">12:00 — 23:00</span>
+    </div>
+    <div class="hours-row">
+      <span class="day">Domingo</span>
+      <span class="time">14:00 — 21:00</span>
+    </div>
+
+    <div class="status-badge">
+      <div class="status-dot"></div>
+      Abiertos ahora — Pedidos por WhatsApp
+    </div>
+
+    <div style="margin-top:2rem;border-top:1px solid #1a1a1a;padding-top:1.5rem;">
+      <div style="font-family:var(--font-body);font-size:0.7rem;letter-spacing:0.25em;text-transform:uppercase;color:#444;margin-bottom:0.7rem;">Tiempo de preparación</div>
+      <div style="font-family:var(--font-display);font-size:2.5rem;line-height:1;color:var(--amarillo);">8 min</div>
+      <div style="font-family:var(--font-text);font-size:0.8rem;color:#555;margin-top:0.3rem;">Preparación · Entrega estimada en 25 min</div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ FOOTER ══════════════════════════════════════ -->
+<footer>
+  <div class="footer-copy">
+    © 2026 <strong>BUCKET BITES</strong> — Dark Kitchen · Armenia, Quindío 🔥
+  </div>
+  <div style="display:flex;align-items:center;gap:1.5rem;">
+    <div class="bite-points-badge">
+      <strong>🏆 BUCKET POINTS</strong> · 5 compras = 1 gratis
+    </div>
+    <img src="web_images/monograma.png" alt="bucky" style="width:100px;height:100px;">
+  </div>
+</footer>
+
+<script>
+  // ── Reveal on scroll ──
+  const reveals = document.querySelectorAll('[data-reveal]');
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('visible'), i * 120);
+      }
+    });
+  }, { threshold: 0.1 });
+  reveals.forEach(r => obs.observe(r));
+
+  // ── Contador de bebidas ──
+  function cambiarQty(id, delta) {
+    const inp = document.getElementById(id);
+    const val = Math.max(0, (parseInt(inp.value) || 0) + delta);
+    inp.value = val;
+    syncBebidas();
+  }
+
+  function syncBebidas() {
+    // syncBebidas ahora dispara el recalculo completo
+    actualizarResumen();
+  }
+
+  function actualizarBebidasDisplay(cola, soda, tea) {
+    const partes = [];
+    if (cola > 0) partes.push(`Coca Cola ×${cola}`);
+    if (soda > 0) partes.push(`Soda ×${soda}`);
+    if (tea  > 0) partes.push(`Mr Tea ×${tea}`);
+    const el = document.getElementById('res-bebidas');
+    if (el) el.textContent = partes.length ? partes.join(' · ') : '—';
+  }
+
+  // ── Formulario de pedido ──
+  function elegirBalde(tipo) {
+    document.getElementById('sel-balde').value = tipo;
+    actualizarResumen();
+    document.getElementById('pedir').scrollIntoView({ behavior: 'smooth' });
+  }
+
+  const PRECIOS = { 'Basic': 22000, 'Street': 32000, 'Power': 42000 };
+  const PRECIO_BEBIDA = 6000; // precio por bebida
+
+  function formatCOP(n) {
+    return '$' + n.toLocaleString('es-CO');
+  }
+
+  function actualizarResumen() {
+    const balde = document.getElementById('sel-balde').value;
+    const cantidad = parseInt(document.getElementById('sel-cantidad').value) || 1;
+    const nombre = document.getElementById('inp-nombre').value || '—';
+    const dir = document.getElementById('inp-direccion').value || '—';
+
+    document.getElementById('res-balde').textContent = balde || '—';
+    document.getElementById('res-cantidad').textContent = cantidad;
+    document.getElementById('res-nombre').textContent = nombre;
+    document.getElementById('res-dir').textContent = dir;
+
+    const bloqueEntradas = document.getElementById('bloque-entradas');
+    const bloqueFuertes = document.getElementById('bloque-fuertes');
+
+    let precioUnit = 0;
+    if (balde.includes('Basic')) {
+      bloqueEntradas.style.display = 'block';
+      bloqueFuertes.style.display = 'none';
+      precioUnit = PRECIOS['Basic'];
+    } else if (balde.includes('Street')) {
+      bloqueEntradas.style.display = 'block';
+      bloqueFuertes.style.display = 'block';
+      precioUnit = PRECIOS['Street'];
+    } else if (balde.includes('Power')) {
+      bloqueEntradas.style.display = 'none';
+      bloqueFuertes.style.display = 'block';
+      precioUnit = PRECIOS['Power'];
+    } else {
+      bloqueEntradas.style.display = 'none';
+      bloqueFuertes.style.display = 'none';
+    }
+
+    const e = parseInt(document.getElementById('num-empanada').value)||0;
+    const m = parseInt(document.getElementById('num-marranita').value)||0;
+    const p = parseInt(document.getElementById('num-perro').value)||0;
+    const b2 = parseInt(document.getElementById('num-burger').value)||0;
+    const a = parseInt(document.getElementById('num-arepa').value)||0;
+
+    const partes = [];
+    if (e > 0) partes.push(`${e} Empanadita(s)`);
+    if (m > 0) partes.push(`${m} Marranita(s)`);
+    if (p > 0) partes.push(`${p} Perrito(s)`);
+    if (b2 > 0) partes.push(`${b2} Hamburguesita(s)`);
+    if (a > 0) partes.push(`${a} Arepita(s)`);
+
+    document.getElementById('res-desglose').textContent = partes.length
+      ? partes.join(' · ')
+      : 'Detalla tus minis arriba ↑';
+
+    // Precios
+    const cola = parseInt(document.getElementById('qty-cola').value)||0;
+    const soda = parseInt(document.getElementById('qty-soda').value)||0;
+    const tea  = parseInt(document.getElementById('qty-tea').value)||0;
+    const totalBebidas = (cola + soda + tea) * PRECIO_BEBIDA;
+    const subtotalBalde = precioUnit * cantidad;
+    const total = subtotalBalde + totalBebidas;
+
+    if (precioUnit > 0) {
+      document.getElementById('res-precio-unit').textContent = formatCOP(precioUnit) + ' × ' + cantidad + ' = ' + formatCOP(subtotalBalde);
+    } else {
+      document.getElementById('res-precio-unit').textContent = '—';
+    }
+
+    const rowBeb = document.getElementById('row-bebidas-precio');
+    if (totalBebidas > 0) {
+      rowBeb.style.display = 'flex';
+      document.getElementById('res-precio-bebidas').textContent = formatCOP(totalBebidas);
+    } else {
+      rowBeb.style.display = 'none';
+    }
+
+    document.getElementById('res-total').textContent = total > 0 ? formatCOP(total) : '—';
+
+    actualizarBebidasDisplay(cola, soda, tea);
+  }
+
+  function pedirPorWhatsapp(e) {
+    e.preventDefault();
+    const balde = document.getElementById('sel-balde').value;
+    const cantidad = document.getElementById('sel-cantidad').value;
+    const nombre = document.getElementById('inp-nombre').value;
+    const dir = document.getElementById('inp-direccion').value;
+    const nota = document.getElementById('inp-nota').value;
+
+    const emp = document.getElementById('num-empanada').value;
+    const mar = document.getElementById('num-marranita').value;
+    const per = document.getElementById('num-perro').value;
+    const bur = document.getElementById('num-burger').value;
+    const are = document.getElementById('num-arepa').value;
+
+    const cola = parseInt(document.getElementById('qty-cola').value) || 0;
+    const soda = parseInt(document.getElementById('qty-soda').value) || 0;
+    const tea  = parseInt(document.getElementById('qty-tea').value)  || 0;
+
+    if (!balde) { alert('¡Elige un tipo de balde primero!'); return; }
+    if (!nombre) { alert('¡Cuéntanos tu nombre!'); return; }
+    if (!dir) { alert('¡Necesitamos tu dirección!'); return; }
+
+    let msg = `🔥 *NUEVO PEDIDO — BUCKET BITES*\n\n`;
+    msg += `👤 *Nombre:* ${nombre}\n`;
+    msg += `🪣 *Balde:* ${balde} (×${cantidad})\n`;
+    msg += `\n*Composición del balde:*\n`;
+    if (parseInt(emp) > 0) msg += `  🫔 Empanaditas: ×${emp}\n`;
+    if (parseInt(mar) > 0) msg += `  🍌 Marranitas: ×${mar}\n`;
+    if (parseInt(per) > 0) msg += `  🌭 Perritos: ×${per}\n`;
+    if (parseInt(bur) > 0) msg += `  🍔 Hamburguesitas: ×${bur}\n`;
+    if (parseInt(are) > 0) msg += `  🫓 Arepitas: ×${are}\n`;
+
+    if (cola > 0 || soda > 0 || tea > 0) {
+      msg += `\n🥤 *Bebidas:*\n`;
+      if (cola > 0) msg += `  🔴 Coca Cola 400ml: ×${cola}\n`;
+      if (soda > 0) msg += `  🔵 Soda 400ml: ×${soda}\n`;
+      if (tea  > 0) msg += `  🟢 Mr Tea 400ml: ×${tea}\n`;
+    }
+
+    const cola2 = parseInt(document.getElementById('qty-cola').value)||0;
+    const soda2 = parseInt(document.getElementById('qty-soda').value)||0;
+    const tea2  = parseInt(document.getElementById('qty-tea').value)||0;
+    const pKey = balde.includes('Basic') ? 'Basic' : balde.includes('Street') ? 'Street' : 'Power';
+    const precioU = PRECIOS[pKey] || 0;
+    const cantidadN = parseInt(document.getElementById('sel-cantidad').value)||1;
+    const totalBeb2 = (cola2 + soda2 + tea2) * PRECIO_BEBIDA;
+    const totalFinal = precioU * cantidadN + totalBeb2;
+
+    msg += `\n📍 *Dirección:* ${dir}\n`;
+    if (nota) msg += `📝 *Nota:* ${nota}\n`;
+    msg += `\n💰 *Resumen de precio:*\n`;
+    msg += `  Balde: ${formatCOP(precioU)} × ${cantidadN} = ${formatCOP(precioU*cantidadN)}\n`;
+    if (totalBeb2 > 0) msg += `  Bebidas: ${formatCOP(totalBeb2)}\n`;
+    msg += `  *TOTAL: ${formatCOP(totalFinal)}*\n`;
+    msg += `\n_Pedido realizado desde bucketbites.co — Armenia, Quindío_`;
+
+    const numero = '573012145150'; // Reemplaza con tu número de WhatsApp (incluyendo código de país, sin signos ni espacios)
+    const url = `https://wa.me/${numero}?text=${encodeURIComponent(msg)}`;
+    window.open(url, '_blank');
+  }
+</script>
+</body>
+</html>
